@@ -48,5 +48,4 @@ app.use(globalErrorHandler)
 
 //ROUTES
 
-
 module.exports = app
