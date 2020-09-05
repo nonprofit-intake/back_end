@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 
+const globalErrorHandler = require('./utils/globalErrorHandler')
 
 const rateLimit = require('express-rate-limit')
 const helmet = require('helmet')
@@ -10,11 +11,12 @@ const morgan = require('morgan')
 const cors = require('cors')
 const compression = require("compression")
 
+const authRouter = require('./auth/auth-routes')
+
 app.use(compression())
 app.use(helmet())
 app.use(cors())
 app.use(express.json())
-
 
 
 // API limiter
@@ -43,9 +45,11 @@ app.use(hpp())
 
 
 // Global Error Handling
-app.use(globalErrorHandler)
-
 
 //ROUTES
+
+app.use('/api/auth', authRouter)
+
+app.use(globalErrorHandler)
 
 module.exports = app
