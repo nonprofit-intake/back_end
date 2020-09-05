@@ -1,15 +1,9 @@
-const express = require("express");
-const server = express();
-server.use(express.json());
+require('dotenv').config({ path: './config.env' })
 
-server.get("/", (req, res) => {
-  res.send("<h1>Welcome to the API</h1>");
-});
+const app = require('./app')
 
-
-require("dotenv").config();
 const port = process.env.PORT || 5005;
 
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`\n* Server Running on http://localhost:${port}\n`);
 });
