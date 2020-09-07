@@ -4,6 +4,37 @@ const AppError = require('../utils/AppError')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
+
+exports.protect = async (req, res, next) => {
+    let token
+
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        token = req.headers.authorization.split(' ')[1]
+    }
+
+    if (!token) {
+        return next(new AppError('Please login to continue', 401))
+    }
+
+    try {
+        let decoded = await jwt.verify(token, process.env.JWT_SECRET)
+
+        const currentUser = await db('users').where({ id: decoded.id }).first()
+
+        if (!currentUser) {
+            return next(new AppError('The User belonging to this token no longer exists', 401))
+        }
+
+        currentUser.password = undefined
+
+        req.user = currentUser
+
+        return next()
+    } catch (error) {
+        next(new AppError('Please login to continue', 401))
+    }
+}
+
 exports.registerUser = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -49,11 +80,12 @@ exports.registerUser = async (req, res, next) => {
 exports.logIn = async (req, res, next) => {
     const { username, password } = req.body
 
+
     try {
-        let user = await db.select('username', 'password', 'id').from('users').where({ username })
+        let user = await db('users').where({ username })
 
         // Check if user exists
-        user.length == 0 ? next(new AppError("User does not exist", 404)) : next()
+        user.length == 0 ? next(new AppError("Username does not exist", 404)) : next()
         user = user[0]
 
         // Compare passwords
@@ -65,11 +97,15 @@ exports.logIn = async (req, res, next) => {
 
         const token = signToken(user.id)
 
+        // Zero out password before sending it to client
+        user.password = undefined
+
         res.status(200).json({
             status: 200,
             message: "Welcome back",
+            token,
             payload: {
-                token
+                user
             }
         })
 

@@ -13,11 +13,18 @@ const compression = require("compression")
 
 const authRouter = require('./auth/auth-routes')
 
+const userRouter = require('./users/user-routes')
+
 app.use(compression())
 app.use(helmet())
 app.use(cors())
+
 app.use(express.json())
 
+// app.use((req, res, next) => {
+//     console.log(req.headers)
+//     next()
+// })
 
 // API limiter
 const limiter = rateLimit({
@@ -49,6 +56,8 @@ app.use(hpp())
 //ROUTES
 
 app.use('/api/auth', authRouter)
+
+app.use('/api/users', userRouter)
 
 app.use(globalErrorHandler)
 
