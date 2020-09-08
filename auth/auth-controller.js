@@ -119,7 +119,6 @@ exports.logIn = async (req, res, next) => {
             }
         })
 
-
     } catch (error) {
         next(new AppError("Internal server error", 500))
     }
