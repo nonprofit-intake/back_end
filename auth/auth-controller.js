@@ -4,6 +4,14 @@ const AppError = require('../utils/AppError')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
+exports.restrictTo = (...roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            next(new AppError("You do not have permission to perform this action", 403))
+        }
+        next()
+    }
+}
 
 exports.protect = async (req, res, next) => {
     let token
@@ -84,15 +92,17 @@ exports.logIn = async (req, res, next) => {
     try {
         let user = await db('users').where({ username })
 
-        // Check if user exists
-        user.length == 0 ? next(new AppError("Username does not exist", 404)) : next()
+        if (user.length == 0) {
+            return next(new AppError("Username does not exist", 404))
+        }
+
         user = user[0]
 
         // Compare passwords
         let passwordIsCorrect = await bcrypt.compare(password, user.password)
 
         if (!passwordIsCorrect) {
-            return next(new AppError("Invalid username or password", 404))
+            return next(new AppError("Invalid password", 404))
         }
 
         const token = signToken(user.id)
