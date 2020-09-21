@@ -35,48 +35,13 @@ const validator = [
 
 router
     .route('/register')
-    .post(validator, mw.checkIfUsernameExists, authController.registerUser)
+    .post(authController.registerUser)
 
 router
     .route('/login')
-    .post(mw.validateLogin, authController.logIn)
+    .post(authController.logIn)
 
-
-
-
-// router.post('/register', validator, mw.checkIfUsernameExists, async (req, res, next) => {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//         let errMsg = errors.array()[0].msg
-//         next(new AppError(errMsg, 400))
-//         return
-//     }
-
-//     let { name, username, password } = req.body
-
-//     try {
-//         password = await bcrypt.hash(password, 10)
-
-//         const newUser = {
-//             name,
-//             username,
-//             password
-//         }
-
-//         let user = await db('users').insert(newUser)
-
-//         res.status(201).json({
-//             status: 201,
-//             message: "User has been created",
-//             token: "Some token"
-//         })
-
-//     } catch (error) {
-//         next(new AppError("Unable to register user", 500))
-//     }
-
-// })
-
-router.post('/login', (req, res, next) => { })
-
+router
+    .route('/staff/register')
+    .post(authController.protect, authController.restrictTo('staff', 'admin'), authController.registerUserAsGuest)
 module.exports = router

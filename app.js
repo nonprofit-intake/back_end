@@ -1,8 +1,8 @@
 const express = require('express')
 const app = express()
-
+const db = require('./data/db-config')
 const globalErrorHandler = require('./utils/globalErrorHandler')
-
+const faker = require('faker')
 const rateLimit = require('express-rate-limit')
 const helmet = require('helmet')
 const xss = require('xss-clean')
@@ -10,9 +10,9 @@ const hpp = require('hpp')
 const morgan = require('morgan')
 const cors = require('cors')
 const compression = require("compression")
-
+const guestsRouter = require('./guests/guests-routes')
 const authRouter = require('./auth/auth-routes')
-
+const {v4} = require('uuid')
 const userRouter = require('./users/user-routes')
 
 app.use(compression())
@@ -21,22 +21,11 @@ app.use(cors())
 
 app.use(express.json())
 
-// app.use((req, res, next) => {
-//     console.log(req.headers)
-//     next()
-// })
 
-// API limiter
 const limiter = rateLimit({
     max: 100,
     windowMs: 60 * 60 * 1000,
     message: "Too many requests from this IP, please try again later"
-})
-
-app.use((req, res, next) => {
-    setTimeout(() => {
-        next()
-    }, 2000)
 })
 
 app.use('/api', limiter)
@@ -64,6 +53,8 @@ app.use(hpp())
 app.use('/api/auth', authRouter)
 
 app.use('/api/users', userRouter)
+
+app.use('/api/guests', guestsRouter)
 
 app.use(globalErrorHandler)
 

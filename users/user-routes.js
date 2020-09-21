@@ -1,28 +1,18 @@
 const express = require('express')
-
-const router = express.Router()
-
-const authController = require('../auth/auth-controller')
-
 const userController = require('./user-controller')
-const { route } = require('../auth/auth-routes')
+const router = express.Router()
+const auth = require('../auth/auth-controller')
+const mw = require('./user-middleware')
 
-const authMw = require('../auth/auth-middleware')
 
-router
-    .route('/')
-    .get(userController.getAllUsers)
-
-router
-    .use(authController.protect)
-    .route('/me')
-    .get(userController.getCurrentUser)
+router.get('/', userController.getAllUsers)
 
 router
-    .use(authController.protect)
     .route('/:id')
     .get(userController.getUser)
-    .patch(authMw.checkIfUsernameExists, userController.updateUser)
-    .delete(authController.restrictTo('admin'), userController.deleteUser)
+    .patch(userController.updateUser)
+    .delete(userController.deleteUser)
+
+router.get('/me', auth.protect, userController.me)
 
 module.exports = router
