@@ -25,7 +25,6 @@ exports.getAllUsers = async (req, res, next) => {
             message: "Unable to retrieve users"
         })
     }
-
 }
 
 exports.getUser = async (req, res, next) => {

@@ -68,7 +68,7 @@ exports.registerUser = async (req, res, next) => {
             email,
             password,
             pin,
-            role: 'staff'
+            role: 'staff',
         }
 
         let user = await db('users').insert(newUser).returning('*')
@@ -106,7 +106,6 @@ exports.registerUserAsGuest = async (req, res, next) => {
 
     let { first_name, last_name, email, password, pin } = req.body
 
-
     try {
         password = await bcrypt.hash(password, 10)
 
@@ -117,7 +116,8 @@ exports.registerUserAsGuest = async (req, res, next) => {
             email,
             password,
             pin,
-            role: "guest"
+            role: "guest",
+            isAuthorized: true
         }
 
         let user = await db('users').insert(newUser).returning('*')
