@@ -27,7 +27,7 @@ app.use(express.json())
 //     message: "Too many requests from this IP, please try again later"
 // })
 
-app.use('/api', limiter)
+// app.use('/api', limiter)
 
 // Login limiter 
 // const loginLimiter = rateLimit({
@@ -35,7 +35,7 @@ app.use('/api', limiter)
 //     windowMs: 60 * 60 * 1000,
 //     message: "Too many login attempts, please try again later"
 // })
-app.use('/api/auth/login', loginLimiter)
+// app.use('/api/auth/login', loginLimiter)
 
 
 // XSS Attacks
