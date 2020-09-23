@@ -21,7 +21,6 @@ exports.protect = async (req, res, next) => {
         token = req.headers.authorization.split(' ')[1]
     }
 
-
     if (!token) {
         return next(new AppError('Please login to continue', 401))
     }
@@ -31,9 +30,9 @@ exports.protect = async (req, res, next) => {
 
         const currentUser = await db('users').where({ user_id: decoded.user_id }).first()
 
-        // if (!currentUser.isAuthorized) {
-        //     return next(new AppError("You need to be authorized to perform this action"))
-        // }
+        if (!currentUser.isAuthorized) {
+            return next(new AppError("You need to be authorized to perform this action"))
+        }
 
         if (!currentUser) {
             return next(new AppError('The User belonging to this token no longer exists', 401))
