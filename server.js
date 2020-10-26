@@ -2,6 +2,8 @@ require('dotenv').config({ path: './config.env' })
 
 const db = require('./data/db-config')
 
+// Check if the database is up
+
 db.raw('select 1+1 as result').then(con => {
   console.log("* Database connected")
 }).catch(err => {

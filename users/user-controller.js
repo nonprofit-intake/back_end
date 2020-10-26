@@ -2,7 +2,6 @@ const db = require('../data/db-config')
 
 exports.getAllUsers = async (req, res, next) => {
 
-
     try {
         const users = await db('users').modify(qb => {
             if (req.query.isAuthorized) {
