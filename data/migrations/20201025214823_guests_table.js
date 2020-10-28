@@ -63,7 +63,6 @@ exports.up = function (knex) {
     guests.text("Private_employer");
     guests.text("private");
     guests.text("private_individual");
-    guests.text("email");
     guests.text("home_phone");
     guests.text("work_phone");
 
@@ -72,28 +71,27 @@ exports.up = function (knex) {
     guests.float("stayed_7_or_less");
     guests.float("stayed_90_or_less");
     guests.float("stayed_street_ES_or_SH_night_before");
-    guests.float("length_of_time_homeless");
+    guests.text("length_of_time_homeless");
     guests.float("zip");
     guests.float("rrh_in_perm_housing");
-    guests.float("rrh_date_of_move-in");
-    guests.text("in_school");
+    guests.date("rrh_date_of_move-in");
+    guests.boolean("in_school");
 
-    guests.float("general_health_status");
-    guests.float("dental_health_status");
-    guests.float("mental_health_status");
-    guests.float("pregnancy_status");
-    guests.float("pregnancy_due_date");
-    guests.float("soar_enrollment");
+    guests.text("general_health_status");
+    guests.text("dental_health_status");
+    guests.text("mental_health_status");
+    guests.text("pregnancy_status");
+    guests.date("pregnancy_due_date");
+    guests.text("soar_enrollment");
     guests.float("earned_income");
     guests.integer("program_type");
 
     // *
 
-    guests.float("date_status_determined");
+    guests.date("date_status_determined");
     guests.float("latitude");
     guests.float("longitude");
     guests.float("referal_source");
-    guests.float("date_status_determined");
 
     guests.float("enroll_status");
     guests.float("runaway_youth");
@@ -111,9 +109,6 @@ exports.up = function (knex) {
     guests.float("most_recent_YAHP");
     guests.float("supplemental_security_income");
     guests.float("child_support");
-    guests.float("");
-    guests.float("");
-    guests.float("");
 
     guests.integer("case_members");
     guests.integer("age_at_enrollment");
@@ -143,10 +138,6 @@ exports.up = function (knex) {
     guests.integer("chronic_homeless_status_assessment");
 
     guests.integer("chronic_homeless_status_evaluation");
-    guests.integer("");
-    guests.integer("");
-    guests.integer("");
-    guests.integer("");
 
     guests.date("enroll_date");
     guests.date("exit_date");
