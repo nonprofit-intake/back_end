@@ -102,7 +102,19 @@ exports.addFamilyMember = async (req, res, next) => {
 
   try {
     const {
+      other_public,
+      indian_health_services,
+      living_situation,
+      project_name,
+      city,
+      zip,
+      state,
+      vet_status,
+      pregnancy_status,
+      pregnancy_due_date, 
       // new
+      sexual_orientation,
+      preferred_language,
       relationship_to_HoH,
       first_name,
       last_name,
@@ -112,8 +124,6 @@ exports.addFamilyMember = async (req, res, next) => {
       enroll_date,
       gender,
       last_perm_address,
-      zip,
-      state,
       stayed_street_ES_or_SH_night_before,
       length_of_stay,
       stayed_7_or_less,
@@ -130,6 +140,7 @@ exports.addFamilyMember = async (req, res, next) => {
       VAMS,
       COBRA,
       Private_employer,
+      private_individual,
       private,
       covered_by_state,
       state_funded,
@@ -167,10 +178,29 @@ exports.addFamilyMember = async (req, res, next) => {
       attendance_status,
       middle_name,
       current_age,
+      reason_for_not_having_id,
+      drivers_liscense,
+      passport,
+      military_card,
+      state_issued_id,
+      alternative_id,
+      personal_phone_number,
+      home_phone_number,
+      emergency_contact_number,
+      emergency_contact_name
     } = req.body;
 
     const member = {
+      other_public,
+      indian_health_services,
+      private_individual,
+      living_situation,
+      project_name,
+      pregnancy_status,
+      city,
+      vet_status,
       fam_id,
+      preferred_language,
       relationship_to_HoH,
       first_name,
       last_name,
@@ -237,6 +267,17 @@ exports.addFamilyMember = async (req, res, next) => {
       middle_name,
       current_age,
       ssn,
+      sexual_orientation,
+      reason_for_not_having_id,
+      drivers_liscense,
+      passport,
+      military_card,
+      state_issued_id,
+      alternative_id,
+      personal_phone_number,
+      home_phone_number,
+      emergency_contact_number,
+      emergency_contact_name
     };
 
     const new_member = await db("guests").insert(member).returning("*");
