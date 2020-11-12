@@ -26,6 +26,7 @@ exports.protect = async (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
 
+
   if (!token) {
     return next(new AppError("Please login to continue", 401));
   }
@@ -34,7 +35,7 @@ exports.protect = async (req, res, next) => {
     let decoded = await jwt.verify(token, process.env.JWT_SECRET);
 
     const currentUser = await db("users")
-      .where({ user_id: decoded.user_id })
+      .where({ id: decoded.id })
       .first();
 
     if (!currentUser.isAuthorized) {
@@ -55,6 +56,7 @@ exports.protect = async (req, res, next) => {
 
     return next();
   } catch (error) {
+    console.log(error)
     next(new AppError("Please login to continue", 401));
   }
 };
@@ -78,7 +80,8 @@ exports.registerUser = async (req, res, next) => {
       email,
       password,
       pin,
-      role: "staff",
+      role: "admin",
+      isAuthorized: true
     };
 
     let user = await db("users").insert(newUser).returning("*");
@@ -89,7 +92,7 @@ exports.registerUser = async (req, res, next) => {
     // Hide the password before sending it to client
     user.password = undefined;
 
-    const token = signToken(user.user_id);
+    const token = signToken(user.id);
 
     res.status(201).json({
       status: 201,
@@ -134,7 +137,7 @@ exports.registerUserAsGuest = async (req, res, next) => {
     // Hide the password before sending it to client
     user.password = undefined;
 
-    const token = signToken(user.user_id);
+    const token = signToken(user.id);
 
     res.status(201).json({
       status: 201,
@@ -168,7 +171,7 @@ exports.logIn = async (req, res, next) => {
       return next(new AppError("Invalid password", 404));
     }
 
-    const token = signToken(user.user_id);
+    const token = signToken(user.id);
 
     // Zero out password before sending it to client
     user.password = undefined;
@@ -186,8 +189,8 @@ exports.logIn = async (req, res, next) => {
   }
 };
 
-function signToken(user_id) {
-  return jwt.sign({ user_id }, process.env.JWT_SECRET, {
+function signToken(id) {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 }
