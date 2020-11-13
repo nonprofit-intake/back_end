@@ -10,6 +10,12 @@ exports.getAllUsers = async (req, res, next) => {
             if (req.query.role) {
                 qb.where({ role: req.query.role })
             }
+            if(req.query.clocked_in){
+                qb.where({clocked_in: true})
+            }
+            if(req.query.role){
+                qb.where({role: req.query.role})
+            }
         })
         res.status(200).json({
             status: 200,
@@ -28,7 +34,7 @@ exports.getAllUsers = async (req, res, next) => {
 
 exports.getUser = async (req, res, next) => {
     try {
-        let user = await db('users').where({ user_id: req.params.id })
+        let user = await db('users').where({ id: req.params.id })
 
         res.status(200).json({
             status: 200,
@@ -46,7 +52,7 @@ exports.getUser = async (req, res, next) => {
 
 exports.updateUser = async (req, res, next) => {
     try {
-        const updatedUser = await db('users').where({ user_id: req.params.id }).update(req.body).returning('*')
+        const updatedUser = await db('users').where({ id: req.params.id }).update(req.body).returning('*')
         res.status(200).json({
             status: 200,
             user: updatedUser

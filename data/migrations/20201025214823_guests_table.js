@@ -22,7 +22,7 @@ exports.up = function (knex) {
     guests.date("dob")
     guests.date('pregnancy_due_date')
 
-    guests.boolean("is_pregnent", 128)
+    guests.boolean("is_pregnant", 128)
     guests.boolean("vet_status");
 
     guests.integer("age_at_enrollment");
@@ -51,13 +51,13 @@ exports.up = function (knex) {
 
     // Programs
 
-    guests.text("covered_by_state");
-    guests.text("foodstamps");
-    guests.text("cps_or_fps");
-    guests.text("rrh");
-    guests.text("housing_voucher");
-    guests.text("veteran_services");
-    guests.text("snap_assistance");
+    guests.boolean("covered_by_state");
+    guests.boolean("foodstamps");
+    guests.boolean("cps_or_fps");
+    guests.boolean("rrh");
+    guests.boolean("housing_voucher");
+    guests.boolean("veteran_services");
+    guests.boolean("snap_assistance");
     
     // Program
 
@@ -74,7 +74,6 @@ exports.up = function (knex) {
     // Locations
 
     guests.text("last_perm_address");
-    guests.text("prior_address");
     guests.text("city");
     guests.text("state");
     guests.text("zip");

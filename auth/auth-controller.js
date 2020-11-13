@@ -80,8 +80,8 @@ exports.registerUser = async (req, res, next) => {
       email,
       password,
       pin,
-      role: "admin",
-      isAuthorized: true
+      isAuthorized: true,
+      role: 'admin'
     };
 
     let user = await db("users").insert(newUser).returning("*");
@@ -147,7 +147,7 @@ exports.registerUserAsGuest = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    
     next(new AppError("Unable to register user", 500));
   }
 };
@@ -159,7 +159,7 @@ exports.logIn = async (req, res, next) => {
     let user = await db("users").where({ email });
 
     if (user.length == 0) {
-      return next(new AppError("Username does not exist", 404));
+      return next(new AppError("That email does not exist", 404));
     }
 
     user = user[0];
@@ -173,7 +173,7 @@ exports.logIn = async (req, res, next) => {
 
     const token = signToken(user.id);
 
-    // Zero out password before sending it to client
+    // set password to undefined before sending it to client
     user.password = undefined;
 
     res.status(200).json({

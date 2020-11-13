@@ -12,8 +12,10 @@ db.raw('select 1+1 as result').then(con => {
 });
 
 const app = require('./app')
-
 const port = process.env.PORT || 5005;
+
+
+console.log('* Environment -> ' + process.env.NODE_ENV)
 
 app.listen(port, () => {
   console.log(`\n* Server Running on http://localhost:${port}\n`);
