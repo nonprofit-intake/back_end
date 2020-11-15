@@ -59,7 +59,7 @@ exports.getAllFamilyMembers = async (req, res, next) => {
 exports.updateGuest = async (req, res, next) => {
   try {
     let result = await db("guests")
-      .where({ personal_id: req.params.member_id })
+      .where({ guest_id: req.params.member_id })
       .update(req.body)
       .returning("*");
     res.status(200).json({
@@ -80,7 +80,7 @@ exports.updateGuest = async (req, res, next) => {
 exports.deleteGuest = async (req, res, next) => {
   try {
     let result = await db("guests")
-      .where({ personal_id: req.params.member_id })
+      .where({ guest_id: req.params.member_id })
       .del()
       .returning("*");
     res.status(200).json({
@@ -91,6 +91,7 @@ exports.deleteGuest = async (req, res, next) => {
       },
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       status: 500,
       message: "Unable to delete member",

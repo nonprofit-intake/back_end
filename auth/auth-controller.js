@@ -62,11 +62,6 @@ exports.protect = async (req, res, next) => {
 };
 
 exports.registerUser = async (req, res, next) => {
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //     let errMsg = errors.array()[0].msg
-  //     return next(new AppError(errMsg, 400))
-  // }
 
   let { first_name, last_name, email, password, pin } = req.body;
 
@@ -80,8 +75,7 @@ exports.registerUser = async (req, res, next) => {
       email,
       password,
       pin,
-      isAuthorized: true,
-      role: 'admin'
+      role: 'staff'
     };
 
     let user = await db("users").insert(newUser).returning("*");
@@ -108,12 +102,7 @@ exports.registerUser = async (req, res, next) => {
 };
 
 exports.registerUserAsGuest = async (req, res, next) => {
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //     let errMsg = errors.array()[0].msg
-  //     return next(new AppError(errMsg, 400))
-  // }
-
+  
   let { first_name, last_name, email, password, pin } = req.body;
 
   try {
@@ -147,7 +136,7 @@ exports.registerUserAsGuest = async (req, res, next) => {
       },
     });
   } catch (error) {
-    
+    console.log(error)
     next(new AppError("Unable to register user", 500));
   }
 };

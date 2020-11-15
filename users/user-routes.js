@@ -6,7 +6,11 @@ const mw = require('./user-middleware')
 
 router.get('/', userController.getAllUsers)
 
-router.get('/me', auth.protect, userController.me)
+router
+    .use(auth.protect)
+    .route('/me')
+    .get(userController.me)
+    .patch(userController.updateMe)
 
 router
     .route('/:id')

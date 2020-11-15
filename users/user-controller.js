@@ -67,8 +67,7 @@ exports.updateUser = async (req, res, next) => {
 
 exports.deleteUser = async (req, res, next) => {
     try {
-
-        const user = await db('users').where({ user_id: req.params.id }).del().returning('*')
+        const user = await db('users').where({ id: req.params.id }).del().returning('*')
         res.status(200).json({
             status: 200,
             message: "User has been deleted",
@@ -96,6 +95,35 @@ exports.me = async (req, res, next) => {
         res.status(500).json({
             status: 500,
             message: 'Could not retrieve user'
+        })
+    }
+}
+
+exports.updateMe = async (req,res,next) => {
+    try {
+        const { id } = req.user
+
+        const updatedFields = {
+            clocked_in: req.body.clocked_in,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            email: req.body.email
+        }
+
+        const updatedUser = await db('users').update(updatedFields).where({id}).returning('*')
+
+        res.status(200).json({
+            status: 200,
+            payload: {
+                user: updatedUser
+            }
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            status: 500,
+            message: 'Internal Server Error'
         })
     }
 }
