@@ -10,10 +10,11 @@ const hpp = require("hpp");
 const morgan = require("morgan");
 const cors = require("cors");
 const compression = require("compression");
-const guestsRouter = require("./guests/guests-routes");
 const authRouter = require("./auth/auth-routes");
 const { v4 } = require("uuid");
 const userRouter = require("./users/user-routes");
+const familyRouter = require('./families/fam-routes')
+const guestRouter = require('./guests/guest-router')
 
 app.use(compression());
 app.use(helmet());
@@ -51,11 +52,13 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use("/api/auth", authRouter);
+app.use("/api/v1/auth", authRouter);
 
-app.use("/api/users", userRouter);
+app.use("/api/v1/users", userRouter);
 
-app.use("/api/guests", guestsRouter);
+app.use('/api/v1/families',familyRouter)
+
+app.use('/api/v1/guests', guestRouter)
 
 
 // Global Error Handling

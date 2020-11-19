@@ -38,7 +38,7 @@ exports.protect = async (req, res, next) => {
       .where({ id: decoded.id })
       .first();
 
-    if (!currentUser.isAuthorized) {
+    if (currentUser.role == "pending") {
       return next(
         new AppError("You need to be authorized to perform this action")
       );
@@ -69,18 +69,17 @@ exports.registerUser = async (req, res, next) => {
     password = await bcrypt.hash(password, 10);
 
     const newUser = {
-      unique_id: v4(),
       first_name,
       last_name,
       email,
       password,
       pin,
-      role: 'staff'
+      role: 'admin'
     };
 
     let user = await db("users").insert(newUser).returning("*");
 
-    // Get's user object from array
+    // Get user object from array
     user = user[0];
 
     // Hide the password before sending it to client
@@ -115,8 +114,7 @@ exports.registerUserAsGuest = async (req, res, next) => {
       email,
       password,
       pin,
-      role: "guest",
-      isAuthorized: true,
+      role: "guest"
     };
 
     let user = await db("users").insert(newUser).returning("*");
