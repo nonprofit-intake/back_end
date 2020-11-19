@@ -40,7 +40,7 @@ exports.protect = async (req, res, next) => {
 
     if (currentUser.role == "pending") {
       return next(
-        new AppError("You need to be authorized to perform this action")
+        new AppError("Please contact an admin to become authorized")
       );
     }
 
@@ -73,8 +73,7 @@ exports.registerUser = async (req, res, next) => {
       last_name,
       email,
       password,
-      pin,
-      role: 'admin'
+      pin
     };
 
     let user = await db("users").insert(newUser).returning("*");

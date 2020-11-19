@@ -55,7 +55,7 @@ exports.updateUser = async (req, res, next) => {
         const updatedUser = await db('users').where({ id: req.params.id }).update(req.body).returning('*')
         res.status(200).json({
             status: 200,
-            user: updatedUser
+            user: updatedUser[0]
         })
     } catch (error) {
         res.status(500).json({
@@ -68,12 +68,9 @@ exports.updateUser = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
     try {
         const user = await db('users').where({ id: req.params.id }).del().returning('*')
-        res.status(200).json({
-            status: 200,
-            message: "User has been deleted",
-            payload: {
-                user
-            }
+        res.status(204).json({
+            status: 204,
+            message: "User has been deleted"
         })
     } catch (error) {
         res.status(500).json({

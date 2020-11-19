@@ -21,6 +21,6 @@ router
 router
     .route('/:id/members')
     .get(famController.getAllFamilyMembers)
-    .post(mw.validateFields,famController.addFamilyMember)
+    .post(famController.addFamilyMember)
 
 module.exports = router
