@@ -38,6 +38,7 @@ exports.registerFamily = async (req, res, next) => {
 
 exports.addFamilyMember = async (req,res,next) => {
 
+    
     const newMember = {
         ...req.body,
         fam_id: req.params.id

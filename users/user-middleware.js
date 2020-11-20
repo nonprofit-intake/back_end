@@ -13,3 +13,4 @@ exports.validateUserId = async (req, res, next) => {
         return next(new AppError("Internal Server Error", 500))
     }
 }
+

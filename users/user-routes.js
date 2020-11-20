@@ -4,11 +4,9 @@ const router = express.Router()
 const auth = require('../auth/auth-controller')
 const mw = require('./user-middleware')
 
-router.route('*').all(auth.protect, auth.restrictTo('admin'))
+router.route('/:id').all(auth.protect, mw.validateUserId ,auth.restrictTo('admin', 'staff'))
 
-router.route('/:id').all(mw.validateUserId)
-
-router.get('/', userController.getAllUsers)
+router.get('/', auth.protect, auth.restrictTo('admin', 'staff'),userController.getAllUsers)
 
 router
     .route('/:id')
