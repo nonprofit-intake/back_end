@@ -4,13 +4,9 @@ const router = express.Router()
 const auth = require('../auth/auth-controller')
 const mw = require('./user-middleware')
 
-router.get('/', userController.getAllUsers)
+router.route('/:id').all(auth.protect, mw.validateUserId ,auth.restrictTo('admin', 'staff'))
 
-router
-    .use(auth.protect)
-    .route('/me')
-    .get(userController.me)
-    .patch(userController.updateMe)
+router.get('/', auth.protect, auth.restrictTo('admin', 'staff'),userController.getAllUsers)
 
 router
     .route('/:id')
@@ -18,5 +14,10 @@ router
     .patch(userController.updateUser)
     .delete(userController.deleteUser)
 
+router
+    .use(auth.protect)
+    .route('/me')
+    .get(userController.me)
+    .patch(userController.updateMe)
 
 module.exports = router

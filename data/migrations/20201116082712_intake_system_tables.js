@@ -81,6 +81,9 @@ exports.up = function (knex) {
         tbl.text('vehicle_color')
         tbl.text('vehicle_lic')
 
+        // other
+
+        tbl.boolean('entered_into_cmis')
       })
 
       .createTable('guests', tbl => {
@@ -152,7 +155,6 @@ exports.up = function (knex) {
         tbl.date('created_at').defaultTo(knex.fn.now())
         tbl.text('title')
         tbl.text('description')
-
       })
       .createTable("users", function (tbl) {
         tbl.increments();
@@ -161,6 +163,13 @@ exports.up = function (knex) {
         tbl.string("email").notNullable().unique();
         tbl.string("password", 128).notNullable();
         tbl.string("pin").notNullable();
+        tbl.boolean('clocked_in').defaultTo(false)
+        tbl
+        .integer('fam_id')
+          .unsigned()
+          .references('id')
+          .inTable('families')
+        tbl.date('clocked_in_at')
         tbl
           .enu("role", ["staff", "admin", "guest", "pending"])
           .notNullable()

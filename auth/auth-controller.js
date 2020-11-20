@@ -38,9 +38,9 @@ exports.protect = async (req, res, next) => {
       .where({ id: decoded.id })
       .first();
 
-    if (!currentUser.isAuthorized) {
+    if (currentUser.role == "pending") {
       return next(
-        new AppError("You need to be authorized to perform this action")
+        new AppError("Please contact an admin to become authorized")
       );
     }
 
@@ -69,18 +69,16 @@ exports.registerUser = async (req, res, next) => {
     password = await bcrypt.hash(password, 10);
 
     const newUser = {
-      unique_id: v4(),
       first_name,
       last_name,
       email,
       password,
       pin,
-      role: 'staff'
     };
 
     let user = await db("users").insert(newUser).returning("*");
 
-    // Get's user object from array
+    // Get user object from array
     user = user[0];
 
     // Hide the password before sending it to client
@@ -96,29 +94,27 @@ exports.registerUser = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log(error);
+
     next(new AppError("Unable to register user", 500));
   }
 };
 
 exports.registerUserAsGuest = async (req, res, next) => {
-  
+  console.log('I was hit')
   let { first_name, last_name, email, password, pin } = req.body;
 
   try {
     password = await bcrypt.hash(password, 10);
 
     const newUser = {
-      unique_id: v4(),
       first_name,
       last_name,
       email,
       password,
       pin,
-      role: "guest",
-      isAuthorized: true,
+      role: "guest"
     };
-
+    console.log('test')
     let user = await db("users").insert(newUser).returning("*");
 
     user = user[0];
