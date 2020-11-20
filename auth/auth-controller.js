@@ -73,7 +73,7 @@ exports.registerUser = async (req, res, next) => {
       last_name,
       email,
       password,
-      pin
+      pin,
     };
 
     let user = await db("users").insert(newUser).returning("*");
@@ -94,20 +94,19 @@ exports.registerUser = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log(error);
+
     next(new AppError("Unable to register user", 500));
   }
 };
 
 exports.registerUserAsGuest = async (req, res, next) => {
-  
+  console.log('I was hit')
   let { first_name, last_name, email, password, pin } = req.body;
 
   try {
     password = await bcrypt.hash(password, 10);
 
     const newUser = {
-      unique_id: v4(),
       first_name,
       last_name,
       email,
@@ -115,7 +114,7 @@ exports.registerUserAsGuest = async (req, res, next) => {
       pin,
       role: "guest"
     };
-
+    console.log('test')
     let user = await db("users").insert(newUser).returning("*");
 
     user = user[0];

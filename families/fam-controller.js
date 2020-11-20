@@ -31,6 +31,7 @@ exports.registerFamily = async (req, res, next) => {
             }
         })
     } catch (error) {
+        console.log(error)
         next(new AppError('Internal Server Error', 500))
     }
 }
@@ -72,6 +73,7 @@ exports.getAllFamilyMembers = async (req,res,next) => {
             }
         })
     } catch (error) {
+        console.log(error)
         next(new AppError('Internal Server Error', 500))
     }
 }
